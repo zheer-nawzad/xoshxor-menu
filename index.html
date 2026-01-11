@@ -69,12 +69,24 @@
     <button class="category-btn" data-category="drinks" data-ku="خواردنەوە" data-en="Beverages" data-ar="المشروبات">خواردنەوە</button>
     <button class="category-btn game-btn" data-category="game" data-ku="🎮 یاری" data-en="🎮 Game" data-ar="🎮 لعبة">🎮 یاری</button>
     <button class="category-btn whopays-btn" data-category="whopays" data-ku="🎮 یاری کێ پارە دەدات" data-en="🎮 Who Pays Game" data-ar="🎮 لعبة من يدفع">🎮 یاری کێ پارە دەدات</button>
+    <button class="category-btn" data-category="gallery" style="background: linear-gradient(135deg, #2D6A6A, #1E4A4A); color: white; border: none; font-weight: 700;">
+        <span data-ku="📸 وێنەی خواردنەکان" data-en="📸 Food Gallery" data-ar="📸 معرض الطعام">📸 وێنەی خواردنەکان</span>
+    </button>
     <a href="http://192.168.1.112:5001/feedback" style="text-decoration: none;">
         <button class="category-btn" style="background: linear-gradient(135deg, #C9A227, #b8941f); color: white; border: none; font-weight: 700;">
-            <span data-ku="⭐ هەڵسەنگاندن" data-en="⭐ Feedback" data-ar="⭐ التقييم">⭐ هەڵسەنگاندن</span>
+            <span data-ku="⭐ هەڵسەنگاندن" data-en="⭐ Feedback" data-ar="⭐ التقییم">⭐ هەڵسەنگاندن</span>
         </button>
     </a>
 </nav>
+
+<!-- Photo Gallery Section -->
+<section class="menu-section" id="gallery" style="display: none;">
+<h2 class="section-title" data-ku="وێنەی خواردنەکان" data-en="Food Gallery" data-ar="معرض الطعام">وێنەی خواردنەکان</h2>
+
+<div class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px;">
+    <!-- Photos will be loaded here by JavaScript -->
+</div>
+</section>
 
 <section class="menu-section active" id="food">
 <h2 class="section-title" data-ku="خواردنی سەرەکی" data-en="Main Dishes" data-ar="الأطباق الرئيسية">خواردنی سەرەکی</h2>
@@ -1463,5 +1475,133 @@ wpStyles.textContent = `
 `;
 document.head.appendChild(wpStyles);
 </script>
+
+<!-- Photo Gallery System -->
+<script>
+// Photo data with Kurdish names
+const foodGallery = [
+    // Chicken
+    { name: 'مریشکی خۆشخۆر', nameEn: 'Xoshkhor Chicken', nameAr: 'دجاج خوشخور', file: 'مریشکی_خۆشخۆر_.jpg' },
+    { name: 'مریشکی سورەوەکراو', nameEn: 'Fried Chicken', nameAr: 'دجاج مقلي', file: '__مریشکی_سورەوەکراو__.jpg' },
+    { name: 'مریشکی ڕوبەهەنار', nameEn: 'Robehenar Chicken', nameAr: 'دجاج روبهنار', file: 'مریشکی_روبەهەنار_.jpg' },
+    { name: 'مریشکی ڕوبەهەنار و قەرەخەرمان', nameEn: 'Robehenar Chicken with Pickles', nameAr: 'دجاج روبهنار مع المخللات', file: '__مریشکی_ڕوبەهەنار_و_قەرەخەرمان.jpg' },
+    { name: 'مریشکی ڕوبەهەنار و بریانی', nameEn: 'Robehenar Chicken with Biryani', nameAr: 'دجاج روبهنار مع برياني', file: 'مریشکی_ڕوبەهەنار_و_بریانی.jpg' },
+    { name: 'مریشکی خۆشخۆر و قەرەخەرمان', nameEn: 'Xoshkhor Chicken with Pickles', nameAr: 'دجاج خوشخور مع المخللات', file: '__مریشکی_خۆشخۆر__و__قەرەخەرمان.jpg' },
+    { name: 'مریشکی خۆشخۆر و بریانی', nameEn: 'Xoshkhor Chicken with Biryani', nameAr: 'دجاج خوشخور مع برياني', file: 'مریشکی_خۆشخۆر_و_بریانی_.jpg' },
+    { name: 'مریشکی فرن', nameEn: 'Oven Chicken', nameAr: 'دجاج فرن', file: 'مریشکی_فرن_و_برنجی_کوردی_.jpg' },
+    
+    // Lamb
+    { name: 'قۆزی ماینچە', nameEn: 'Qozi Maincha', nameAr: 'قوزي ماينشا', file: 'قۆزی_ماینچە.jpg' },
+    { name: 'قۆزی', nameEn: 'Qozi', nameAr: 'قوزي', file: 'قۆزی.jpg' },
+    { name: 'قۆزی و بریانی', nameEn: 'Qozi with Biryani', nameAr: 'قوزي مع برياني', file: 'قۆزی_و_بریانی.jpg' },
+    { name: 'قۆزی و ساوەر', nameEn: 'Qozi with Sawer', nameAr: 'قوزي مع ساور', file: 'قۆزی_و_ساوەر.jpg' },
+    { name: 'قۆزی و قەرەخەرمان', nameEn: 'Qozi with Pickles', nameAr: 'قوزي مع المخللات', file: 'قۆزی_و_قەرەخەرمان.jpg' },
+    { name: 'ماینچە', nameEn: 'Maincha', nameAr: 'ماينشا', file: 'ماینچە_.jpg' },
+    { name: 'ماینچە و بریانی', nameEn: 'Maincha with Biryani', nameAr: 'ماينشا مع برياني', file: 'ماینچە_و_بریانی.jpg' },
+    { name: 'ماینچە و ساوەر', nameEn: 'Maincha with Sawer', nameAr: 'ماينشا مع ساور', file: 'ماینچە_و_ساوەر.jpg' },
+    { name: 'ماینچە و قەرەخەرمان', nameEn: 'Maincha with Pickles', nameAr: 'ماينشا مع المخللات', file: 'ماینچە_و_قەرەخەرمان.jpg' },
+    { name: 'قەلیە', nameEn: 'Qalya', nameAr: 'قلية', file: 'قەلیە.jpg' },
+    { name: 'قەلیە و بریانی', nameEn: 'Qalya with Biryani', nameAr: 'قلية مع برياني', file: 'قەلیە_و_بریانی.jpg' },
+    { name: 'قەلیە و ساوەر', nameEn: 'Qalya with Sawer', nameAr: 'قلية مع ساور', file: 'قەلیە_و_ساوەر.jpg' },
+    { name: 'قەلیە و قەرەخەرمان', nameEn: 'Qalya with Pickles', nameAr: 'قلية مع المخللات', file: 'قەلیە_و_قەرەخەرمان.jpg' },
+    
+    // Others
+    { name: 'شێخ مەحشی', nameEn: 'Sheikh Mahshi', nameAr: 'شيخ محشي', file: '_شێخ_مەحشی.jpg' },
+    { name: 'شفتە', nameEn: 'Shifta', nameAr: 'شفتة', file: '١_شفتە.jpg' },
+    { name: 'شفتە بە وەجبە', nameEn: 'Shifta with Sides', nameAr: 'شفتة مع الإضافات', file: 'شفتە_بە_وەجبە_.jpg' },
+    
+    // Rice
+    { name: 'بریانی خۆشخۆر', nameEn: 'Xoshkhor Biryani', nameAr: 'برياني خوشخور', file: 'بریانی_خۆشخۆر.jpg' },
+    { name: 'برنج کوردی', nameEn: 'Kurdish Rice', nameAr: 'أرز كردي', file: 'قاپک_برنجی_کوردی_.jpg' },
+    { name: 'برنج درێژ', nameEn: 'Long Rice', nameAr: 'أرز طويل', file: 'قاپێک_برنجی_درێژ.jpg' },
+    { name: 'برنج موشەکەل', nameEn: 'Mushekel Rice', nameAr: 'أرز موشكل', file: 'قاپی_موشەکەل.jpg' },
+    { name: 'برنج سادە', nameEn: 'Plain Rice', nameAr: 'أرز سادة', file: 'سادە.jpg' },
+    
+    // Sides
+    { name: 'ساوەری خۆشخۆر', nameEn: 'Xoshkhor Sawer', nameAr: 'ساور خوشخور', file: 'ساوەری_خۆشخۆر_.jpg' },
+    { name: 'قەرەخەرمان', nameEn: 'Pickles', nameAr: 'مخللات', file: 'قەرەخەرمان_.jpg' },
+    { name: 'قەرەخەرمان و شلە', nameEn: 'Pickles with Stew', nameAr: 'مخللات مع الحساء', file: 'قەرەخەرمان_و_شلە.jpg' }
+];
+
+// Load gallery
+function loadGallery() {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+    
+    const currentLang = document.body.classList.contains('rtl') ? 'ku' : 
+                       document.querySelector('.lang-btn.active').dataset.lang;
+    
+    galleryGrid.innerHTML = foodGallery.map(item => {
+        const displayName = currentLang === 'ku' ? item.name : 
+                           currentLang === 'en' ? item.nameEn : item.nameAr;
+        
+        return `
+            <div class="gallery-item" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer;" 
+                 onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.2)'" 
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.1)'"
+                 onclick="showFullImage('/images/food/${item.file}', '${displayName.replace(/'/g, "\\'")}')">
+                <div style="height: 220px; overflow: hidden;">
+                    <img src="/images/food/${item.file}" alt="${displayName}" 
+                         style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+                         onmouseover="this.style.transform='scale(1.1)'"
+                         onmouseout="this.style.transform='scale(1)'">
+                </div>
+                <div style="padding: 15px; text-align: center;">
+                    <h3 style="margin: 0; font-size: 1.1rem; color: #2D6A6A; font-weight: 600;">${displayName}</h3>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Show full image modal
+function showFullImage(src, name) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.95); z-index: 10000; 
+        display: flex; justify-content: center; align-items: center; 
+        flex-direction: column; padding: 20px; box-sizing: border-box;
+    `;
+    
+    modal.innerHTML = `
+        <button onclick="this.parentElement.remove(); document.body.style.overflow='auto'" 
+                style="position: absolute; top: 20px; right: 20px; background: white; border: none; 
+                       border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; 
+                       z-index: 10001; box-shadow: 0 5px 20px rgba(0,0,0,0.3);">✕</button>
+        <img src="${src}" style="max-width: 90%; max-height: 80%; object-fit: contain; border-radius: 15px; 
+                                  box-shadow: 0 10px 50px rgba(0,0,0,0.7); margin-bottom: 20px;">
+        <h2 style="color: white; font-size: 1.5rem; text-align: center; margin: 0;">${name}</h2>
+    `;
+    
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.remove();
+            document.body.style.overflow = 'auto';
+        }
+    };
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+}
+
+// Initialize gallery when section is shown
+document.addEventListener('DOMContentLoaded', () => {
+    // Add gallery button click handler
+    const galleryBtn = document.querySelector('[data-category="gallery"]');
+    if (galleryBtn) {
+        const originalCategoryHandler = window.showCategory;
+        window.showCategory = function(category) {
+            originalCategoryHandler.call(this, category);
+            if (category === 'gallery') {
+                loadGallery();
+            }
+        };
+    }
+    
+    console.log('📸 Photo Gallery loaded - 40 photos available!');
+});
+</script>
+
 </body>
 </html>
