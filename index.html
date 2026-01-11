@@ -287,6 +287,12 @@ categoryBtns.forEach(btn => {
             initGame();
             window.gameInitialized = true;
         }
+        
+        // Load gallery when gallery tab is clicked
+        if (category === 'gallery' && !window.galleryInitialized) {
+            loadGallery();
+            window.galleryInitialized = true;
+        }
     });
 });
 
@@ -1585,21 +1591,8 @@ function showFullImage(src, name) {
     document.body.style.overflow = 'hidden';
 }
 
-// Initialize gallery when section is shown
-document.addEventListener('DOMContentLoaded', () => {
-    // Add gallery button click handler
-    const galleryBtn = document.querySelector('[data-category="gallery"]');
-    if (galleryBtn) {
-        const originalCategoryHandler = window.showCategory;
-        window.showCategory = function(category) {
-            originalCategoryHandler.call(this, category);
-            if (category === 'gallery') {
-                loadGallery();
-            }
-        };
-    }
-    
-    console.log('📸 Photo Gallery loaded - 40 photos available!');
+// Initialize on page load
+console.log('📸 Photo Gallery loaded - 40 photos available!');
 });
 </script>
 
